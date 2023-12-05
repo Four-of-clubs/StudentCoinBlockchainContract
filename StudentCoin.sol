@@ -16,7 +16,7 @@ contract StudentCoin {
 
     mapping(string => CoinStruct) public studentCoinMap;
 
-    string[] private studentsInSystem;
+    string[] public studentsInSystem;
 
     constructor(string memory argContractName) {
         owner = msg.sender;
@@ -49,7 +49,7 @@ contract StudentCoin {
     }
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    function getStudentPoints(string memory studentName) public view onlyOwnerOrAdmin returns (CoinStruct memory) {
+    function getStudentPoints(string memory studentName) public view returns (CoinStruct memory) {
         string memory lowercaseStudentName = toLower(studentName);
         require(studentExists(lowercaseStudentName), "Student does not exist");
         return studentCoinMap[lowercaseStudentName];
@@ -75,7 +75,7 @@ contract StudentCoin {
         studentCoinMap[lowercaseStudentName].totalCoins += numberOfCoins;
     }
 
-    function studentPurchase(string memory studentName, uint numberOfCoins) public {
+    function studentPurchase(string memory studentName, uint numberOfCoins) public onlyOwnerOrAdmin{
         string memory lowercaseStudentName = toLower(studentName);
         require(studentCoinMap[lowercaseStudentName].totalCoins >= numberOfCoins, "Insufficient current coins");
 
